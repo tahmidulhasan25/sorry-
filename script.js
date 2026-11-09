@@ -1,9 +1,10 @@
 const envelopeWrapper = document.getElementById('envelopeWrapper');
-let isOpen = false;
+const fullLetterOverlay = document.getElementById('fullLetterOverlay');
+const closeBtn = document.getElementById('closeBtn');
 
-// Touch/Click support for both mobile swipe and click
 let startY = 0;
 
+// Touch and Click event handlers
 envelopeWrapper.addEventListener('touchstart', (e) => {
     startY = e.touches[0].clientY;
 });
@@ -11,27 +12,30 @@ envelopeWrapper.addEventListener('touchstart', (e) => {
 envelopeWrapper.addEventListener('touchend', (e) => {
     let endY = e.changedTouches[0].clientY;
     if (startY - endY > 30) { // Swipe Up detection
-        toggleEnvelope();
+        openEnvelope();
     }
 });
 
 envelopeWrapper.addEventListener('click', () => {
-    toggleEnvelope();
+    openEnvelope();
 });
 
-function toggleEnvelope() {
+closeBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    closeEnvelope();
+});
+
+function openEnvelope() {
     const envelope = document.querySelector('.envelope');
-    if (!isOpen) {
-        envelope.classList.add('open');
-        setTimeout(() => {
-            envelopeWrapper.classList.add('slide-up');
-        }, 300);
-        isOpen = true;
-    } else {
-        envelopeWrapper.classList.remove('slide-up');
-        setTimeout(() => {
-            document.querySelector('.envelope').classList.remove('open');
-        }, 400);
-        isOpen = false;
-    }
+    envelope.classList.add('open');
+    setTimeout(() => {
+        fullLetterOverlay.classList.add('show');
+    }, 400);
+}
+
+function closeEnvelope() {
+    fullLetterOverlay.classList.remove('show');
+    setTimeout(() => {
+        document.querySelector('.envelope').classList.remove('open');
+    }, 400);
 }
